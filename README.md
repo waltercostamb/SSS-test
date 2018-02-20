@@ -4,8 +4,11 @@ This folder contains the perl scripts SSS.pl and local.pl. The first runs the SS
 
 Required software: 
 	- RNAsnp: http://rth.dk/resources/rnasnp/software
+	
 	- muscle aligner: http://www.drive5.com/muscle
+
 	- Vienna RNA package: http://www.itc.univie.ac.at/~ivo/RNA/INSTALL.html
+
 	- Bio::AlignIO from cpan: http://search.cpan.org/dist/BioPerl/Bio/AlignIO.pm
 
 Pre-Usage:
