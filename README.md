@@ -3,6 +3,7 @@
 This folder contains the perl scripts SSS.pl and local.pl. The first runs the SSS-test (Selection on the Secondary Structure-test) and the second runs the local pipeline. The SSS-test predicts structural selection by assigning selection scores for each of the given species. The local pipeline calculates local structure blocks for long ncRNAs.
 
 Required software: 
+
 	- RNAsnp: http://rth.dk/resources/rnasnp/software
 	
 	- muscle aligner: http://www.drive5.com/muscle
