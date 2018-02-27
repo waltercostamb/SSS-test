@@ -12,6 +12,8 @@ Required software:
 
 	- Bio::AlignIO from cpan: http://search.cpan.org/dist/BioPerl/Bio/AlignIO.pm
 
+	- fasconvert from cpan: http://search.cpan.org/dist/FAST/bin/fasconvert
+
 Pre-Usage:
 - if necessary, copy the lib/distParam directory from the RNAsnp sources over
   to the RNAsnp installation location.
