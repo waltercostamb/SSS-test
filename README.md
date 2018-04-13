@@ -13,6 +13,8 @@ Required software:
 	- Bio::AlignIO from cpan: http://search.cpan.org/dist/BioPerl/Bio/AlignIO.pm
 
 	- fasconvert from cpan: http://search.cpan.org/dist/FAST/bin/fasconvert
+	
+	- Statistics::R from cpan: http://search.cpan.org/~gmpassos/Statistics-R-0.02/lib/Statistics/R.pm
 
 Pre-Usage:
 - if necessary, copy the lib/distParam directory from the RNAsnp sources over
