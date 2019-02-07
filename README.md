@@ -38,6 +38,20 @@ Input multi-FASTA files have to be in the appropriate format and in a separate f
  The header of the fasta sequences must have the header indicator '>' followed immediatly by the ID of the group (the same name of the file without extension), followed by a tab, followed by a pipe sign, followed by a second tab, followed by the species name or sequence ID. Minus sings are prohibitted, while underscores are allowed.             
  - Example of a valid FASTA header for file identity.fasta: >identity	|	species                                                                 
 
+Usage:	        bash SSS.sh folder/identity.fa FORMAT (fasta/aligned)  Structure(Yes/No)
+
+      	        bash local.sh folder/identity.fa FORMAT (fasta/aligned)
+
+Examples: In the examples/ folder, you will find two multiple alignments: SIX3_AS1sub10.fa and H19X.fa. The first is a local structure block from lncRNA SIX3 that can be submitted to the SSS-test directly by using the command below. After running the SSS-test you should get a table with selection scores on the output file: SIX3_AS1sub10.sss and a folder with the secondary structures of each species and each respective consensus: examples/SIX3_AS1sub10_structures/
+
+	bash SSS.sh example/SIX3_AS1sub10.fa fasta Yes 
+
+	To measure local structural selection in the H19X long ncRNA, you should first calculate local structure blocks and then apply the SSS-test for the local blocks. For that you can use the command lines below. The first command will create a folder: HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
+
+	bash local.sh example/H19X.fa fasta 
+	bash SSS.sh H19X_local/H19X_sub2.fa fasta Yes
+
+
 Output of the local.pl is a folder with local structural blocks, that can be submitted to the SSS.sh on not aligned mode (fasta)
 
 Output header of SSS.pl:                                                                                                                                                                    

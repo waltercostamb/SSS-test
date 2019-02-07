@@ -1,0 +1,428 @@
+#!/usr/bin/bash
+
+#To get the usage just run the script with no arguments.
+
+export RNASNPPATH=/usr/local/RNAsnp-1.1;
+export LD_LIBRARY_PATH=$HOME/libs
+
+if [ $# == 0 ] ; then
+    echo "Selection on the Secondary Structure test"
+    echo "Maria Beatriz Walter Costa (bia@bioinf.uni-leipzig.de)"
+    echo ""
+    echo "This script processes a multi-FASTA file of ncRNAs and returns selection scores for each sequence. The name of the file must correspond to the ID of the group followed by e file extension." 
+    echo ""
+    echo "Usage: SSS.sh -i input -f format -s structure_files"
+    echo "-i input file (in a separate folder, e. g. dir/file.fasta)"
+    echo "-f format (fasta or aligned)"
+    echo "-s structure_files to be saved (Yes/No)"
+    echo "-d dominant base threshold (default 60% for more than 3 species and 65% for 3 species), please input a value between 0 and 100"
+    echo ""
+    echo "Input file must be in the SSS format and in a separate folder."
+    echo "Examples: identity.fasta, identity.fa, identity.alg"
+    echo "The header of the fasta sequences must have the header indicator '>' followed immediatly by the ID of the group (filename without extension), followed by a tab, a pipe sign, a second tab and the species name or sequence code. Minus sings are prohibitted, underscores are allowed."
+    echo "FASTA header example: >identity	|	Species"
+    echo ""
+    echo "Output header:"
+    echo "sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	sp_score	family_diversity"
+    echo ""
+    echo "- sequence_ID: ID of the sequence"
+    echo "- nr_changes: number of species specific changes. A species specific change is a base of the species that differs from the dominant base of the row, when a dominant base exists for the row. A dominant base exists when at least 60% of the bases of the row converge"
+    echo "- sp_dist: structural distance between the species and the consensus. Distance is calculated using the ensemble base pairing probabilities"
+    echo "- sp_length: length of the species"
+    echo "- alg_length: length of the alignment"
+    echo "- score_indels: indels score, calculated with: -1*(sum(log(corrected pvalues)))"
+    echo "- score_changes: changes score, calculated with: -2*(sum(log(corrected pvalues)))"
+    echo "- sp_score: species selection score, calculated summing both indel and changes score"
+    echo "- diversity: family's structural diversity"
+    echo ""
+    exit 1;
+fi
+
+while getopts ":i:f:s:d:" opt; do
+    case $opt in
+      "i") input="$OPTARG";;
+      "f") FORMAT="$OPTARG";;
+      "s") STRUCTURE="$OPTARG";;
+      "d") threshold_dominant_base="$OPTARG";; 
+    esac
+done
+
+#If the user does not input a desired threshold for dominant base, it is automatically set to 60%
+if [[ $threshold_dominant_base == "" ]]
+   then
+	threshold_dominant_base=60
+	#60% will be changed to 65% in the script, if there are only 3 species available
+	echo "Dominant base threshold is set to default (65% for 3 species and 60% for more than 3 species)"
+   else
+	#If tests if the user defined value is valid (between 0 and 1), otherwise it inputs an error message
+	if [ "$threshold_dominant_base" -ge 0 ] && [ "$threshold_dominant_base" -le 100 ]
+	   then
+		echo "Dominant base threshold is set to user defined $threshold_dominant_base%"
+	else 
+		echo "Please set the dominant base to a value between zero and 100 -> [0,100]"
+		exit 1;
+	fi
+fi
+
+if [[ $input =~ "-" ]]; then
+	echo "Input file must be in specific format, and can not contain '-'";
+	echo "Example allowed names: 'input.fa', 'input.alg', 'input_100.fa', 'input_100.alg'";
+	exit
+fi
+
+if [[ ! -s $input ]]; then
+	echo "It was not possible to open file $1"
+	exit
+fi
+
+input_folder=${input%/*}
+input_no_folder=${input##*/}
+familyID=${input_no_folder%.*}
+
+#script_dir="$HOME/Documents/Lib-SSS-test/scripts"
+program_folder=`echo $0 | sed 's/SSS\.sh//g'`
+script_dir="${program_folder}scripts"
+
+if [[ -d "tmp_$familyID" ]]
+   then
+	rm -r tmp_$familyID
+fi
+
+mkdir tmp_$familyID
+cd tmp_$familyID/
+
+perl $script_dir/get-species.pl ../$input > species-$familyID.txt;
+
+NUM_OF_SEQ=$(wc -l < species-$familyID.txt); 
+
+if (( $NUM_OF_SEQ < 3 ))
+   then
+
+	echo "$familyID has only $NUM_OF_SEQ species, which is not enough information to calculate the sd-ss scores";
+	echo "You should have at least 3 species";
+	
+	rm species-$familyID.txt 
+
+	cd ../
+	rm -r $familyID
+
+	exit
+fi
+
+if [ $FORMAT == "fasta" ]; then 
+	echo 'Aligning sequences'
+	muscle -in ../$input > $familyID.alg;
+	echo ''
+
+        echo 'Checking muscle output'
+	perl $script_dir/twoline-fasta.pl ../$input > $familyID-twoline;
+	perl $script_dir/twoline-fasta.pl $familyID.alg > $familyID.alg-twoline; 
+
+	perl $script_dir/check-muscle-output.pl --muscle_output $familyID.alg-twoline --fasta_file $familyID-twoline
+
+	if [[ -f "warning-muscle.txt" ]]; then
+               	rm warning-muscle.txt
+               	echo ""
+               	echo "Please, align the $input with another tool and submit it to SSS.sh in already aligned mode"     
+               	rm $familyID.alg species-$familyID.txt
+               	cd ../
+               	rmdir tmp_$familyID
+               	exit
+        fi
+
+	echo 'Creating individual FASTA files'
+	perl $script_dir/IO.pl $familyID-twoline fa;
+
+	echo 'Calculating alignment changes'
+	perl $script_dir/alignment_changes-nogap2.pl $familyID.alg-twoline $threshold_dominant_base > $familyID.changes; 
+
+	mv $familyID.alg-twoline alignment.alg;
+	perl $script_dir/IO.pl alignment.alg alg;
+	rm $familyID-twoline $familyID.alg;
+fi
+
+if [ $FORMAT == "aligned" ]; then
+	echo 'Getting raw multi-FASTA'
+	perl $script_dir/twoline-fasta.pl ../$input > $familyID-twoline; 
+	perl $script_dir/nogap.pl $familyID-twoline > $familyID.fa;
+
+	echo 'Calculating alignment changes'
+	perl $script_dir/alignment_changes-nogap2.pl $familyID-twoline $threshold_dominant_base > $familyID.changes; 
+
+	echo 'Creating individual FASTA files'
+	perl $script_dir/IO.pl $familyID.fa fa; 
+	rm $familyID.fa;
+
+	mv $familyID-twoline alignment.alg; 
+	perl $script_dir/IO.pl alignment.alg alg;
+fi
+
+if [ -a ../$input_folder/$familyID.sss ]; then
+	rm ../$input_folder/$familyID.sss
+fi
+
+echo "sequence_ID	nr_changes	dist_sum_RNAsnp	sp_dist	sp_length	alg_length	indel_score_list	score_indels	score_changes	score_changes2	sp_score" >> $familyID-nomedian.sss;
+while read species
+  do
+	echo "Computing $species..."
+
+	#Creating a new alignment, excluding the current species 
+	perl $script_dir/convert-format.pl alignment.alg > align.alg
+	perl $script_dir/alignment-without-species.pl align.alg $species > new-alg.alg;
+
+	echo "Getting consensus sequence from RNAalifold (without $species)"
+	perl $script_dir/convertAlignment.pl -i new-alg.alg -o $familyID-$species.clw -f clustalw; 
+	rm new-alg.alg
+
+	RNAalifold $familyID-$species.clw > $familyID-$species.alifold;
+
+	echo ">$familyID-$species-consensus" >> $familyID-$species-consensus.alg;
+	head -n1 $familyID-$species.alifold >> $familyID-$species-consensus.alg; 
+
+	head -n1 $familyID-$species.alifold > cons.txt	
+	cons=`wc -c < cons.txt`
+	cons=$((cons-1)) 
+	rm cons.txt
+
+	if [[ -f ../$input_folder/$familyID-$species-consensus.rnasnp ]]
+	   then 
+		cp ../$input_folder/$familyID-$species-consensus.rnasnp .
+	   else
+		echo "Measuring change probability in consensus sequence using RNAsnp"
+		RNAsnp --pvalue1=10.0 --pvalue2=10.0 -f $familyID-$species-consensus.alg -m 3 > $familyID-$species-consensus.rnasnp; 
+		cp $familyID-$species-consensus.rnasnp ../$input_folder/.
+	fi
+
+	perl $script_dir/analyse-RNAsnp.pl $familyID-$species-consensus.rnasnp > $familyID-$species-consensus.tmp0;
+	perl $script_dir/tmp0_aligned.pl $familyID-$species-consensus.tmp0 $familyID-$species-consensus.alg > $familyID-$species-consensus.tmp1;
+
+	echo 'Folding sequences with RNAfold'
+	RNAfold -p -d2 --noLP < $familyID-$species-consensus.alg > $familyID-$species-consensus.out; 
+
+	perl $script_dir/intersect-changes-rnasnp.pl $familyID.changes $familyID-$species-consensus.tmp1 $species > $familyID-$species.tmp2;
+
+	if grep 'The species you want to search' $familyID-$species.tmp2
+	   then
+		echo 'Error in input format file'
+		cd ..
+		rm $familyID/*
+		rmdir $familyID/
+		exit
+	fi
+
+	RNAfold -p -d2 --noLP < $familyID-$species.alg > $familyID-$species.out;
+
+	mv ${familyID}_dp.ps $familyID-${species}_dp.ps
+	mv ${familyID}_ss.ps $familyID-${species}_ss.ps
+
+	relplot.pl -p $familyID-$species-consensus_ss.ps $familyID-$species-consensus_dp.ps > $familyID-$species-consensus_rss.ps
+	relplot.pl -p $familyID-${species}_ss.ps $familyID-${species}_dp.ps > $familyID-${species}_rss.ps
+
+	echo "Computing compensatory pairs between minimum free-energy structures of $species and consensus"
+
+	#Computing compensatory pairs, based on the alignment positions of species and consensus
+	perl $script_dir/compensatory.pl $familyID-$species.tmp2 $familyID-$species-consensus_dp.ps $familyID-${species}_dp.ps > $familyID-$species.tmp2.1; 
+
+	alg_length=`grep -v '>' alignment.alg | head -1`;
+	perl $script_dir/ensemble-distance.pl $familyID-$species-consensus_dp.ps $familyID-${species}_dp.ps ${#alg_length} > $familyID-$species.distance;
+	distance=`cat $familyID-$species.distance`;
+		
+	#Computing indels and creating mutated-sequence files in FASTA format
+	#Mutated files are species-mutated sequences, each one being the species sequence plus one indel
+	echo 'Creating indel-mutated species FASTA files'
+	perl $script_dir/indel-extended.pl $familyID-$species.alifold $familyID-$species.alg > $species-indel.tmp;
+
+	#Getting `ancestral_structure' for the observed indels impact analysis using the group consensus
+	#The consensus is considered the ancestral because it represents the group, then we can calculate the impact of the observed indels calculating how they diverge from the group
+	perl $script_dir/get-structure.pl $familyID-$species-consensus.out > ancestral_structure.txt;	
+
+	ch=`head -n1 $species-indel.tmp`
+
+	if [ "$ch" -gt "0" ];
+	   then
+		echo 'Calculating structural distances between indel-mutated and consensus using RNAforester'
+
+		#Constructing species observed indels
+		for i in mutated*.fa
+		   do
+   	                RNAfold -p -d2 --noLP < $i > noconstraint.out; 	
+			perl $script_dir/get-structure.pl noconstraint.out > noconstraint.txt;
+			echo ">noconstraint" > noconstraint.vienna
+			grep -v '>' $i >> noconstraint.vienna
+			cat noconstraint.txt >> noconstraint.vienna
+
+			cat $i ancestral_structure.txt > $i.constraint
+			RNAfold -p -d2 --noLP -C --canonicalBPonly < $i.constraint > constraint.out 2>/dev/null; 
+			#2>/dev/null means send any warning messages to /dev/null (to avoid RNAfold warnings of "removing non-canonical base pair from constraint") 	
+
+			perl $script_dir/get-structure.pl constraint.out > constraint.txt;
+
+			echo ">constraint" > constraint.vienna
+			grep -v '>' $i >> constraint.vienna
+			cat constraint.txt >> constraint.vienna
+
+			cat constraint.vienna noconstraint.vienna > comparator.txt
+
+			#Command below substitute eventual 'N's in the sequences of indel-mutated and/or consensus for random base 'a' - This is necessary for RNAforester to run! If the input contain N's, RNAforester does not recognise the input format and aborts
+			sed 's/[nN]/a/g' comparator.txt > comparator.txt2
+
+			RNAforester -d < comparator.txt2 > $species-tmp.out-$i
+
+			#When there is a problem in the input of RNAforester (e. g. full of gaps), it crashes and returns an error message. The output is then not calculated anymore, when this happens, a bash variable $? returns 1, and by detecting this, the pipeline knows there was an error in RNAforester and the sss calculation is terminated 
+		        #Example of error message from RNAforester: Error: Maximum array size of 2GB exceeded due to large input data. Calculation terminated.	
+			if [ $? -eq 1  ];
+			   then
+				echo ""
+				echo "ERROR: RNAforester encountered a problem in the input data and the sss scores can not be calculated for this family."
+				echo ""
+				cd ..
+				rm -fr tmp_$familyID
+				exit	
+			fi			
+			
+			perl $script_dir/indel-impact.pl $species-tmp.out-$i $i >> $familyID-$species-observed.indel
+			rm $i noconstraint.out noconstraint.txt noconstraint.vienna constraint.out constraint.txt constraint.vienna comparator.txt2 comparator.txt $species-tmp.out-$i $i.constraint ${i%.*}_ss.ps ${i%.*}_dp.ps	
+		done
+
+	#Rank statistics calculation for species indels
+	echo 'Rank statistics for getting indel probabilities'
+
+	for GAP_LENGTH in `tail -n1 $species-indel.tmp`
+	   do
+		if [[ -f ../$input_folder/$familyID-$species-$GAP_LENGTH.indel ]]
+		   then
+			cp ../$input_folder/$familyID-$species-$GAP_LENGTH.indel .
+		   else
+			echo "Calculating background information of structural impact of a $GAP_LENGTH bp gap on the consensus using the gap-modelling pipeline and RNAforester"
+			grep '>' $familyID-$species-consensus.alg > $familyID-$species-consensus.fa
+			grep -v '>' $familyID-$species-consensus.alg | sed 's/_//g' >> $familyID-$species-consensus.fa
+
+			#Check if sequence is duplicated!
+			la=`wc -l < $familyID-$species-consensus.alg`
+			if [[ ! $la -eq 2 ]]
+			then
+				echo "WARNING: error in input sequence $familyID-$species-consensus.alg!"
+				echo "WARNING: error in input sequence $familyID-$species-consensus.alg!" > ../ERROR_$familyID.txt
+			fi
+
+			sh $script_dir/gap-modelling.sh -f $familyID-$species-consensus.fa -l $GAP_LENGTH -c $familyID-$species -d $script_dir
+			cp $familyID-$species-$GAP_LENGTH.indel ../$input_folder/. 
+			rm $familyID-$species-consensus.fa
+		fi
+
+		cat $familyID-$species-$GAP_LENGTH.indel | cut -f4 | sort -n | grep -v RNA | uniq -c > tmp.indel
+		sed 's/  */ /g' tmp.indel > $familyID-$species-$GAP_LENGTH.indelgroup #Required by script indel-score.pl 
+		RNAlength=`tail -n1 $familyID-$species-$GAP_LENGTH.indel | cut -f1`
+		rm tmp.indel
+	done
+	else
+		echo 'no_indels' >> $familyID-$species-observed.indel
+	fi
+	rm -f ancestral_structure.txt
+
+
+
+	#14/03/18: I changed the calculation of indels pvalue on the script below. Now it includes not only the rank, but also the score given by RNAforester normalized by the sequence length
+	perl $script_dir/indel-score.pl $familyID-$species-observed.indel $familyID-$species $RNAlength > $familyID-$species.indel
+	
+	#The script pvalues-bonferroni multiple corrects raw change pvalues, but it also outputs the original raw pvalues. The output of this script will be taken by multipleObservationCorrection.pl, which takes only the original raw pvalues and multiple corrects them. That means that the correction made by script pvalues-bonferroni will be completely disregarded, so that multiple correction is done only once.
+	perl $script_dir/pvalues-bonferroni.pl $familyID-$species.tmp2.1 > $familyID-$species.pvalue;
+	
+	#The script below was completely substituted by multipleObservationCorrection.pl below
+#	perl $script_dir/indels-bonferroni.pl $familyID-$species.indel > indel-$species.final;
+
+########################################################################################################
+#This block was made on Feb 22 2018 to test different multiple correction methods
+echo "Correcting p-values for multiple observation"
+echo "Combining p-values"
+
+#To change the method for multiple observation, go directly to script multipleObservationCorrection.pl - first step is to multiple correct the change pvalues
+perl $script_dir/multipleObservationCorrection.pl $familyID-$species.pvalue change 2 > $familyID-$species.pvalue2
+rm $familyID-$species.pvalue
+mv $familyID-$species.pvalue2 $familyID-$species.pvalue
+
+#To change the method for multiple observation, go directly to script multipleObservationCorrection.pl - second step is to multiple correct the indel pvalues
+perl $script_dir/multipleObservationCorrection.pl $familyID-$species.indel indel 1 > indel-$species.final
+
+#echo "Following up with the rest of the pipeline"
+########################################################################################################
+
+
+	echo "Combining both scores for species specific changes and indels into one final selection score"
+	perl $script_dir/sum-all.pl $familyID-$species.tmp2.1 $distance $familyID $species ${#alg_length} $familyID-$species.indel $familyID-$species.pvalue indel-$species.final >> $familyID-nomedian.sss;
+	cp $familyID-$species.pvalue ../$input_folder/.
+
+	rm $familyID-$species-consensus.tmp0 $familyID-$species.distance $familyID-$species.tmp2 $familyID-$species.tmp2.1 $familyID-$species.pvalue $familyID-$species.alg $familyID-$species-consensus.tmp1 $familyID-$species.clw $familyID-$species.alifold alirna.ps $familyID-$species-consensus.rnasnp $species-indel.tmp $familyID-${species}_ss.ps $familyID-$species-consensus_ss.ps $familyID-$species.out 
+	rm $familyID-$species-consensus.out indel-$species.final $familyID-$species-observed.indel $familyID-$species.indel $familyID-${species}_dp.ps $familyID-${species}_rss.ps $familyID-${species}-consensus_dp.ps $familyID-${species}-consensus_rss.ps
+
+	if [ "$ch" -gt "0" ];
+	   then
+		rm  $familyID-$species-*.indelgroup
+	       	rm $familyID-$species-*.indel
+	fi
+done < species-$familyID.txt
+
+#Getting the distance median of the family
+median=`perl $script_dir/median.pl $familyID-nomedian.sss`
+perl $script_dir/add-median.pl $familyID-nomedian.sss $median > $familyID-full.sss
+perl $script_dir/filter-output.pl $familyID-full.sss > ../$input_folder/$familyID.sss;
+
+cat ../$input_folder/$familyID.sss;
+rm $familyID.changes alignment.alg align.alg $familyID-nomedian.sss $familyID-full.sss
+
+if [[ $STRUCTURE == "Yes" ]] 
+   then
+
+	if [[ -d "../$input_folder/${familyID}_structures" ]]
+	   then
+		rm -r ../$input_folder/${familyID}_structures
+	fi
+
+	mkdir ../$input_folder/${familyID}_structures
+
+	while read species
+	do
+		#Obtaining MFE structures of the consensus and species and colouring by base-pairing
+		head -n1 $familyID-$species-consensus.alg >> $familyID-$species-consensus.fa
+		grep -v '>' $familyID-$species-consensus.alg | sed 's/[-_]//g' >> $familyID-$species-consensus.fa
+
+		RNAfold -p -d2 --noLP < $familyID-$species-consensus.fa > $familyID-$species-consensus.out;
+		relplot.pl -p $familyID-${species}-consensus_ss.ps $familyID-${species}-consensus_dp.ps > $familyID-${species}-consensus-MFE_rss.ps
+		RNAfold -p -d2 --noLP < $familyID-$species.fa > $familyID-$species.out;
+		mv ${familyID}_dp.ps $familyID-${species}_dp.ps
+		mv ${familyID}_ss.ps $familyID-${species}-MFE_ss.ps
+		relplot.pl -p $familyID-${species}-MFE_ss.ps $familyID-${species}_dp.ps > $familyID-${species}-MFE_rss.ps
+
+		mv $familyID-${species}-MFE_rss.ps $familyID-${species}-consensus-MFE_rss.ps ../$input_folder/${familyID}_structures/
+
+		#Obtaining the centroid secondary structure of the consensus and colouring by base-pairing
+		sed '2q;d' $familyID-$species-consensus.out > $familyID-$species-consensus.centroid
+		sed '5q;d' $familyID-$species-consensus.out >> $familyID-$species-consensus.centroid
+		cat $familyID-$species-consensus.centroid | RNAplot
+		relplot.pl -p rna.ps $familyID-${species}-consensus_dp.ps > $familyID-${species}-consensus-centroid_rss.ps
+		mv $familyID-${species}-consensus-centroid_rss.ps $familyID-${species}-consensus_dp.ps ../$input_folder/${familyID}_structures/
+
+		#Obtaining the centroid secondary structure of the species and colouring by base-pairing
+		sed '2q;d' $familyID-$species.out > $familyID-$species.centroid
+		sed '5q;d' $familyID-$species.out >> $familyID-$species.centroid
+		cat $familyID-$species.centroid | RNAplot
+		relplot.pl -p rna.ps $familyID-${species}_dp.ps > $familyID-${species}-centroid_rss.ps
+		mv $familyID-${species}-centroid_rss.ps $familyID-${species}_dp.ps ../$input_folder/${familyID}_structures/
+
+		rm $familyID-$species-consensus.out $familyID-$species.out $familyID-$species-consensus.alg $familyID-$species-consensus.fa $familyID-$species.fa $familyID-${species}-MFE_ss.ps $familyID-${species}-consensus_ss.ps $familyID-$species.centroid rna.ps $familyID-$species-consensus.centroid
+	done < species-$familyID.txt
+
+   elif [[ $STRUCTURE == "No" ]]
+      then
+	rm $familyID-*-consensus.alg $familyID-*.fa
+	if [[ -d "../$input_folder/${familyID}_structures" ]]
+	   then
+		rm -r ../$input_folder/${familyID}_structures
+	fi
+fi
+
+rm species-$familyID.txt 
+cd ../
+rmdir tmp_$familyID
+
+
