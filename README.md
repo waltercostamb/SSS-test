@@ -52,4 +52,6 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
 - score_changes: changes score, calculated using the Fisher's method
 - sp_score: species selection score, calculated summing both indel and changes score
 - divergence: family's structural divergence
-                                                                                                                              
+                                                  
+If you use this test, please cite: "Walter Costa MB, Höner zu Siederdissen C, Stadler PF, Nowick K: SSS-test: a novel test for detecting selection on the secondary structures of non-coding RNAs. (submitted). 2018."						  
+					
