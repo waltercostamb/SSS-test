@@ -1,6 +1,6 @@
 # SSS-test
 
-This folder contains the perl scripts SSS.pl and local.pl. The first runs the SSS-test (Selection on the Secondary Structure-test) and the second runs the local pipeline. The SSS-test predicts structural selection by assigning selection scores for each of the given species. The local pipeline calculates local structure blocks for long ncRNAs.
+This folder contains the bash script SSS.sh and local.pl. The first runs the SSS-test (Selection on the Secondary Structure-test) and the second runs the local pipeline to predict local blocks in long non-coding RNAs. The input for both is a multi-FASTA, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
 
 Required software: 
 
@@ -26,20 +26,19 @@ Pre-Usage:
   provided in a subfolder of the share folder of ViennaRNA)
   export PATH=$PATH:/path-to/RNAsnp/bin:/path-to/ViennaRNA/bin:/path-to/ViennaRNA/share/ViennaRNA/bin:/path-to/muscle/bin
   
-  Usage:	perl SSS.pl --help
-      	  perl local.pl --help
+  Help page for usage:	perl SSS.sh
+  
+      	                perl local.pl --help
           
-Notice that once you run the SSS-test for the first time for any multiple alignment, intermediate files will be created. Therefore the next time you run the test again, the calculation time will be considerably faster.
-
-The SSS-test processes a multi-FASTA file of non-coding RNAs, either previously aligned or not, and returns for each species selection scores in relation to their structure.
-
-The local-block pipeline also processes a multi-FASTA file of non-coding RNAs, either previously aligned or not, and returns a folder containing local structure blocks.
+Notice that once you run the SSS-test for the first time for any multi-FASTA file, intermediate files will be created. Therefore, the next time you run the test again for the same file, the calculation of the sss-scores will be considerably faster.
 
 Input multi-FASTA files have to be in the appropriate format and in a separate folder for both pipelines. The name of the file must correspond to the ID of the group followed by e file extension.
  - Examples: identity.fasta, identity.fa, identity.alg    
  
  The header of the fasta sequences must have the header indicator '>' followed immediatly by the ID of the group (the same name of the file without extension), followed by a tab, followed by a pipe sign, followed by a second tab, followed by the species name or sequence ID. Minus sings are prohibitted, while underscores are allowed.             
  - Example of a valid FASTA header for file identity.fasta: >identity	|	species                                                                 
+
+Output of the local.pl is a folder with local structural blocks, that can be submitted to the SSS.sh on not aligned mode (fasta)
 
 Output header of SSS.pl:                                                                                                                                                                    
 sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	sp_score	family_divergence
@@ -54,4 +53,3 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
 - sp_score: species selection score, calculated summing both indel and changes score
 - divergence: family's structural divergence
                                                                                                                               
-Output of the local.pl is a folder with local structure blocks, that can be submitted to the SSS.sh on not aligned mode (fasta)
