@@ -1,6 +1,6 @@
 # SSS-test
 
-This folder contains the bash script SSS.sh and local.pl. The first runs the SSS-test (Selection on the Secondary Structure-test) and the second runs the local pipeline to predict local blocks in long non-coding RNAs. The input for both is a multi-FASTA, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
+This folder contains the bash scripts SSS.sh and local.sh. The first runs the SSS-test (Selection on the Secondary Structure-test) and the second runs the local pipeline to predict local blocks in long non-coding RNAs. The input for both is a multi-FASTA, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
 
 Required software: 
 
