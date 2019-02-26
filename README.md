@@ -26,9 +26,9 @@ Pre-Usage:
   provided in a subfolder of the share folder of ViennaRNA)
   export PATH=$PATH:/path-to/RNAsnp/bin:/path-to/ViennaRNA/bin:/path-to/ViennaRNA/share/ViennaRNA/bin:/path-to/muscle/bin
   
-  Help page for usage:	perl SSS.sh
-  
-      	                perl local.pl --help
+  Help page for usage:	bash SSS.sh
+
+      	                bash local.sh
           
 Notice that once you run the SSS-test for the first time for any multi-FASTA file, intermediate files will be created. Therefore, the next time you run the test again for the same file, the calculation of the sss-scores will be considerably faster.
 
