@@ -18,10 +18,10 @@ Pre-Usage:
 - make sure that all binaries of required software are in the path (with /path-to/ and /RNAsnp/ /ViennaRNA/ etc replaced appropriately; relplot.pl is provided in a subfolder of the share folder of ViennaRNA)  
   export PATH=$PATH:/path-to/RNAsnp/bin:/path-to/ViennaRNA/bin:/path-to/ViennaRNA/share/ViennaRNA/bin:/path-to/muscle/bin  
   
-  Help page for usage:	
+Help page for usage:	
   
-  	- bash SSS.sh  
-      	- bash local.sh
+	bash SSS.sh  
+	bash local.sh
           
 Notice that once you run the SSS-test for the first time for any multi-FASTA file, intermediate files will be created. Therefore, the next time you run the test again for the same file, the calculation of the sss-scores will be considerably faster.
 
@@ -33,14 +33,14 @@ Input multi-FASTA files have to be in the appropriate format and in a separate f
 
 Usage:	        
 
-	bash SSS.sh folder/identity.fa FORMAT (fasta/aligned)  Structure(Yes/No)  
-      	bash local.sh folder/identity.fa FORMAT (fasta/aligned)
+	bash SSS.sh folder/identity.fa FORMAT (fasta/aligned) Structure(Yes/No)
+	bash local.sh folder/identity.fa FORMAT (fasta/aligned)
 
 Examples: In the examples/ folder, you will find two multiple alignments: SIX3_AS1sub10.fa and H19X.fa. The first is a local structure block from lncRNA SIX3 that can be submitted to the SSS-test directly by using the command below. After running the SSS-test you should get a table with selection scores on the output file: SIX3_AS1sub10.sss and a folder with the secondary structures of each species and each respective consensus: examples/SIX3_AS1sub10_structures/
 
 	bash SSS.sh example/SIX3_AS1sub10.fa fasta Yes 
 
-	To measure local structural selection in the H19X long ncRNA, you should first calculate local structure blocks and then apply the SSS-test for the local blocks. For that you can use the command lines below. The first command will create a folder: HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
+To measure local structural selection in the H19X long ncRNA, you should first calculate local structure blocks and then apply the SSS-test for the local blocks. For that you can use the command lines below. The first command will create a folder: HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
 
 	bash local.sh example/H19X.fa fasta 
 	bash SSS.sh H19X_local/H19X_sub2.fa fasta Yes
@@ -61,5 +61,8 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
 - sp_score: species selection score, calculated summing both indel and changes score
 - divergence: family's structural divergence
                                                   
-If you use this test, please cite: "Walter Costa MB, Höner zu Siederdissen C, Stadler PF, Nowick K: SSS-test: a novel test for detecting selection on the secondary structures of non-coding RNAs. (submitted). 2018."						  
-					
+If you use this test, please cite: 
+
+"SSS-test: a novel test for detecting positive selection on RNA secondary structure", Maria Beatriz Walter Costa, Christian Höner zu Siederdissen, Marko Dunjic, Peter F. Stadler and Katja Nowick. BMC Bioinformatics. 2019
+https://doi.org/10.1186/s12859-019-2711-y
+
