@@ -63,6 +63,5 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
                                                   
 If you use this test, please cite: 
 
-"SSS-test: a novel test for detecting positive selection on RNA secondary structure", Maria Beatriz Walter Costa, Christian Höner zu Siederdissen, Marko Dunjic, Peter F. Stadler and Katja Nowick. BMC Bioinformatics. 2019
+"SSS-test: a novel test for detecting positive selection on RNA secondary structure", Maria Beatriz Walter Costa, Christian Höner zu Siederdissen, Marko Dunjic, Peter F. Stadler and Katja Nowick. BMC Bioinformatics. 2019  
 https://doi.org/10.1186/s12859-019-2711-y
-
