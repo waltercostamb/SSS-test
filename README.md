@@ -10,7 +10,7 @@ git clone https://github.com/waltercostamb/SSS-test
 
 __***Requirements***__
 
-The SSS-test and the local pipeline both require a simple multi-FASTA file as input, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
+Both the SSS-test and local pipeline require additional software, which must be installed previously. To install them, refer to each appropriate link.
 
 Required software: 
 
@@ -55,6 +55,8 @@ The header of the fasta sequences must have the header indicator '>' followed im
 We are implementing a subroutine to simplify FASTA header requirements.
 
 __***Tutorial***__
+
+The SSS-test and the local pipeline both require a simple multi-FASTA file as input, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
 
 In this section, you will learn how to use the local pipeline and the SSS-test with examples contained in this repository. Just follow the directions below, and you will calculate selection scores for ncRNAs and lncRNA blocks and obtain images of secondary structures to analyse visually.
 
