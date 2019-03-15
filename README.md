@@ -27,6 +27,12 @@ Pre-Usage:
   export RNASNPPATH=/path-to/RNAsnp-1.2  
 - make sure that all binaries of required software are in the path (with /path-to/ and /RNAsnp/ /ViennaRNA/ etc replaced appropriately; relplot.pl is provided in a subfolder of the share folder of ViennaRNA)  
   export PATH=$PATH:/path-to/RNAsnp/bin:/path-to/ViennaRNA/bin:/path-to/ViennaRNA/share/ViennaRNA/bin:/path-to/muscle/bin  
+
+__***Bypassing installment requirements***__
+ 
+If you do not wish to pre-install the required softwares and just use the SSS-test and local pipelines directly, you can use the nix-bundle available at: http://www.bioinf.uni-leipzig.de/Software/SSS-test/ 
+
+Just download the SSS-test inside the nix-bundle directory and use the software directly.
   
 __***Help pages***__
   
@@ -89,9 +95,14 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
                 
 __***Reference and citation***__
 
-The SSS-test and local pipeline are refered in the following publication.
+The SSS-test and local pipeline are refered in the following publication, which contains all details on the algorithms.
 
 If you use this test, please cite: 
 
 "SSS-test: a novel test for detecting positive selection on RNA secondary structure", Maria Beatriz Walter Costa, Christian Höner zu Siederdissen, Marko Dunjic, Peter F. Stadler and Katja Nowick. BMC Bioinformatics. 2019  
 https://doi.org/10.1186/s12859-019-2711-y
+
+__***Contact***__
+
+If you have any questions or find any problems, contact the developer: bia.walter@gmail.com
+
