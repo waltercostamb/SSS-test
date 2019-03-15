@@ -108,3 +108,7 @@ __***Contact***__
 
 If you have any questions or find any problems, contact the developer: bia.walter@gmail.com
 
+__***Author***__
+
+Maria Beatriz Walter Costa  
+https://github.com/waltercostamb
