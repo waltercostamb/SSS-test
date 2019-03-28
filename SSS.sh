@@ -81,7 +81,7 @@ familyID=${input_no_folder%.*}
 
 #script_dir="$HOME/Documents/Lib-SSS-test/scripts"
 program_folder=`echo $0 | sed 's/SSS\.sh//g'`
-script_dir="${program_folder}scripts"
+script_dir="../${program_folder}scripts"
 
 if [[ -d "tmp_$familyID" ]]
    then
