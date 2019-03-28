@@ -15,7 +15,7 @@ if [ $# == 0 ] ; then
     echo "-i input file (in a separate folder, e. g. dir/file.fasta)"
     echo "-f format (fasta or aligned)"
     echo "-s structure_files to be saved (Yes/No)"
-    echo "-d dominant base threshold (default 60% for more than 3 species and 65% for 3 species), please input a value between 0 and 100"
+    echo "-d dominant base threshold (default 60%), please input a value between 0 and 100"
     echo ""
     echo "Input file must be in the SSS format and in a separate folder."
     echo "Examples: identity.fasta, identity.fa, identity.alg"
@@ -51,8 +51,7 @@ done
 if [[ $threshold_dominant_base == "" ]]
    then
 	threshold_dominant_base=60
-	#60% will be changed to 65% in the script, if there are only 3 species available
-	echo "Dominant base threshold is set to default (65% for 3 species and 60% for more than 3 species)"
+	echo "Dominant base threshold is set to default (60%)"
    else
 	#If tests if the user defined value is valid (between 0 and 1), otherwise it inputs an error message
 	if [ "$threshold_dominant_base" -ge 0 ] && [ "$threshold_dominant_base" -le 100 ]
