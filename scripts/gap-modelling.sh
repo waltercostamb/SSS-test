@@ -24,7 +24,7 @@ while getopts ":f:l:c:d:" opt; do
       "f") fasta_sequence="$OPTARG";;
       "l") gap_length="$OPTARG";;
       "c") familyID="$OPTARG";;
-      "d") script_dir="$OPTARG";;
+      "d") script_dir="../$OPTARG";;
     esac
 done
 

@@ -304,7 +304,7 @@ while read species
 				echo "WARNING: error in input sequence $familyID-$species-consensus.alg!" > ../ERROR_$familyID.txt
 			fi
 
-			sh $script_dir/gap-modelling.sh -f $familyID-$species-consensus.fa -l $GAP_LENGTH -c $familyID-$species -d $script_dir
+			bash $script_dir/gap-modelling.sh -f $familyID-$species-consensus.fa -l $GAP_LENGTH -c $familyID-$species -d $script_dir
 			cp $familyID-$species-$GAP_LENGTH.indel ../$input_folder/. 
 			rm $familyID-$species-consensus.fa
 		fi
