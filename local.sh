@@ -44,7 +44,7 @@ folder=${input%/*}
 filename=${input##*/} 
 file=${filename%.*} 
 
-script_dir="$HOME/Documents/Lib-SSS-test/scripts"
+script_dir="../${program_folder}scripts"
 
 NUM_OF_SEQ=`cat $input | grep '>' | wc -l`
 #Testing if there is a minimum number of species in the input so that the pipeline is applicable

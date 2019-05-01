@@ -47,6 +47,33 @@ while getopts ":i:f:s:d:" opt; do
     esac
 done
 
+if [[ $input =~ "-" ]]; then
+	echo "Input file must be in specific format, and can not contain '-'";
+	echo "Example allowed names: 'input.fa', 'input.alg', 'input_100.fa', 'input_100.alg'";
+	exit
+fi
+
+if [[ ! -s $input ]]; then
+	echo "It was not possible to open file $1"
+	exit
+fi
+
+input_folder=${input%/*}
+input_no_folder=${input##*/}
+familyID=${input_no_folder%.*}
+
+#Check if the input file is contained in a subfolder of the present folder, if not, print error
+char_slash='/'
+number_folders=`echo "$input" | awk -F "$char_slash" '{print NF-1}'`
+char_back='\.\./'
+number_back=`echo ${input} | grep "${char_back}"`
+
+#If there is more than one subfolder OR there is any '../' pattern, than print error in input location
+if [ $number_folders -ne 1 ] || [ "$number_back" != "" ]; then
+	echo "Error: input FASTA file $input must be in a subdirectory of the present folder!"
+	exit
+fi
+
 #If the user does not input a desired threshold for dominant base, it is automatically set to 60%
 if [[ $threshold_dominant_base == "" ]]
    then
@@ -63,22 +90,6 @@ if [[ $threshold_dominant_base == "" ]]
 	fi
 fi
 
-if [[ $input =~ "-" ]]; then
-	echo "Input file must be in specific format, and can not contain '-'";
-	echo "Example allowed names: 'input.fa', 'input.alg', 'input_100.fa', 'input_100.alg'";
-	exit
-fi
-
-if [[ ! -s $input ]]; then
-	echo "It was not possible to open file $1"
-	exit
-fi
-
-input_folder=${input%/*}
-input_no_folder=${input##*/}
-familyID=${input_no_folder%.*}
-
-#script_dir="$HOME/Documents/Lib-SSS-test/scripts"
 program_folder=`echo $0 | sed 's/SSS\.sh//g'`
 script_dir="../${program_folder}scripts"
 
@@ -131,10 +142,8 @@ if [ $FORMAT == "fasta" ]; then
 
 	echo 'Creating individual FASTA files'
 	perl $script_dir/IO.pl $familyID-twoline fa;
-
 	echo 'Calculating alignment changes'
 	perl $script_dir/alignment_changes-nogap2.pl $familyID.alg-twoline $threshold_dominant_base > $familyID.changes; 
-
 	mv $familyID.alg-twoline alignment.alg;
 	perl $script_dir/IO.pl alignment.alg alg;
 	rm $familyID-twoline $familyID.alg;

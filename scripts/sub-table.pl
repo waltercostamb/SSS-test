@@ -21,7 +21,9 @@ while (<reading_file>){
 		push @headers, "$_";
 		if(/(\w+)$/){
       			$species = $1;
-			push(@pre_list_species, $species) unless $species ~~ @pre_list_species;		
+			unless ( grep( /^$species$/, @pre_list_species )  ) {
+				push(@pre_list_species, $species);
+			}
 		}
 	} 
 }

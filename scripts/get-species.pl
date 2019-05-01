@@ -15,7 +15,16 @@ while (<reading_file>){
 	chomp;
 	if (/^>.+\s\|\s(.+)/){
 		print $1, "\n";
-	}  
+
+	#Else function added according to change in script twoline-fasta.pl for header formatting
+	} elsif (/^>/) {
+		my $header_content = $_;
+                #Removing the '>'
+                $header_content =~ s/^>//;
+                $header_content =~ /^\.{0,15}/;
+                my $species = $header_content;
+                print "$species\n";
+	} 
 }
 
 close reading_file;
