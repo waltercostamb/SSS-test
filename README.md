@@ -43,16 +43,15 @@ Help page for usage:
          
 Notice that once you run the SSS-test for the first time for any multi-FASTA file, intermediate files will be created. Therefore, the next time you run the test again for the same file, the calculation of the sss-scores will be considerably faster.
 
-__***Input format requirements***__
+__***Input requirements***__
 
-The input multi-FASTA files have to be in the appropriate format and in a separate folder for both pipelines. The name of the file must correspond to the ID of the group followed by e file extension.  
- - Examples: identity.fasta, identity.fa, identity.alg    
- 
-The header of the fasta sequences must have the header indicator '>' followed immediatly by the ID of the group (the same name of the file without extension), followed by a tab, followed by a pipe sign, followed by a second tab, followed by the species name or sequence ID. Minus sings are prohibitted, while underscores are allowed.  
+The input multi-FASTA file has to be in a subfolder of the running folder for both pipelines (SSS-test and local.sh). If you are running the SSS-test or local.sh in $DIRECTORY, the input multi-FASTA must be located in $DIRECTORY/$SUB_FOLDER/  
 
- - Example of a valid FASTA header for file identity.fasta: >identity	|	species                                                                 
+For the newest version of SSS-test and local.sh, there are no requirements for the FASTA header.  
 
-We are implementing a subroutine to simplify FASTA header requirements.
+The old requirements for the FASTA header are still valid. In this case, the header must contain the name of the file: ">$FILE_NO_EXTENSION\t|\t$GENE_ID"  
+
+ - Example for file "identity.fasta": ">identity	|	human"  
 
 __***Tutorial***__
 
@@ -62,21 +61,21 @@ In this section, you will learn how to use the local pipeline and the SSS-test w
 
 Usage:	        
 
-	bash SSS.sh folder/identity.fa FORMAT (fasta/aligned) Structure(Yes/No)
-	bash local.sh folder/identity.fa FORMAT (fasta/aligned)
+	bash SSS.sh -i FOLDER/FILE -f FORMAT (fasta/aligned) -s STRUCTURE (Yes/No)
+	bash local.sh -i FOLDER/FILE -f FORMAT (fasta/aligned) -o OUTPUT_FOLDER
 
 In the /examples/ folder, you will find two multi-FASTA files: SIX3_AS1sub10.fa and H19X.fa. The first is a local structure block from the lncRNA SIX3-AS1 that can be submitted to the SSS-test directly. After running the SSS-test, you will obtain an output table with the selection scores and an output folder with the secondary structures of each species and respective consensus. Both outputs will be located in the input folder.
 
 To run the SSS-test for the local block 10 of the SIX3-AS1 lncRNA, use the following command line:
 
-	bash SSS.sh example/SIX3_AS1sub10.fa fasta Yes 
+	bash SSS.sh -i example/SIX3_AS1sub10.fa -f fasta -s Yes 
 
 You will produce an output file with the SSS-scores at: /examples/SIX3_AS1sub10.sss and an output folder at: /examples/SIX3_AS1sub10_structures/.
 
 To measure structural selection locally in the H19X-AS1 lncRNA, you should first calculate local structure blocks and then apply the SSS-test for them. For that you can use the command lines below. The first command will create a folder: /HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
 
-	bash local.sh example/H19X.fa fasta 
-	bash SSS.sh H19X_local/H19X_sub2.fa fasta Yes
+	bash local.sh -i example/H19X.fa -f fasta -o H19X_local_structures 
+	bash SSS.sh -i H19X_local/H19X_sub2.fa -f fasta -s Yes
 
 The output of the local.sh script is a folder with all local structural blocks, which can be directly submitted to the SSS-test on not aligned mode (fasta).
 
