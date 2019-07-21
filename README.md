@@ -57,6 +57,8 @@ __***Tutorial***__
 
 The SSS-test and the local pipeline both require a simple multi-FASTA file as input, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
 
+![](https://github.com/waltercostamb/SSS-test/blob/master/sss_workflow.pdf)
+
 In this section, you will learn how to use the local pipeline and the SSS-test with examples contained in this repository. Just follow the directions below, and you will calculate selection scores for ncRNAs and lncRNA blocks and obtain images of secondary structures to analyse visually.
 
 Usage:	        
