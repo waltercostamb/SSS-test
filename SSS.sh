@@ -90,8 +90,9 @@ if [[ $threshold_dominant_base == "" ]]
 	fi
 fi
 
-program_folder=`echo $0 | sed 's/SSS\.sh//g'`
-script_dir="../${program_folder}scripts"
+# make sure to always get the full path (on linux, BSD not supported)
+program_folder=`readlink -f $(dirname $0)`
+script_dir="${program_folder}/scripts"
 
 if [[ -d "tmp_$familyID" ]]
    then
