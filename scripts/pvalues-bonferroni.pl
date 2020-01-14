@@ -57,6 +57,12 @@ while (<tmp2_file>){
 				}
 
 				$corr_p1_round = sprintf "%.4f", $corr_p1;
+
+				#Correction of error (log zero cases)
+				if ($corr_p1_round < 0.0001) {
+					$corr_p1_round = 0.0001;
+				}
+
 				$p1_vec_corr = $p1_vec_corr.$corr_p1_round.",";
 
 				#Bonferroni correction for p-value2
@@ -67,6 +73,12 @@ while (<tmp2_file>){
 				}
 
 				$corr_p2_round = sprintf "%.4f", $corr_p2;
+
+				#Correction of error (log zero cases)
+				if ($corr_p2_round < 0.0001) {
+					$corr_p2_round = 0.0001;
+				}
+
 				$p2_vec_corr = $p2_vec_corr.$corr_p2_round.",";
 
 				#Taking the logs of the corrected p-values
