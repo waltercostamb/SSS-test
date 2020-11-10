@@ -15,7 +15,7 @@ if [ $# == 0 ] ; then
     echo "Input file must be in the SSS format and in a separate folder, in the same formatting as in the SSS-test."
     echo ""
     echo "-i input file (in a separate folder, e. g. dir/file.fasta)"
-    echo "-f format (fasta or alignes)"
+    echo "-f format (fasta or aligned)"
     echo "-o output folder"
     echo ""
     exit 1;
