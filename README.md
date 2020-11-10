@@ -17,9 +17,9 @@ Required software:
 	- RNAsnp: http://rth.dk/resources/rnasnp/software  
 	- muscle aligner: http://www.drive5.com/muscle  
 	- Vienna RNA package: http://www.itc.univie.ac.at/~ivo/RNA/INSTALL.html  
-	- Bio::AlignIO from cpan: http://search.cpan.org/dist/BioPerl/Bio/AlignIO.pm  
-	- fasconvert from cpan: http://search.cpan.org/dist/FAST/bin/fasconvert  
-	- Statistics::R from cpan: http://search.cpan.org/~gmpassos/Statistics-R-0.02/lib/Statistics/R.pm
+	- Bio::AlignIO from cpan: https://metacpan.org/pod/Bio::AlignIO  
+	- fasconvert from cpan: https://metacpan.org/pod/distribution/FAST/bin/fasconvert
+	- Statistics::R from cpan: https://metacpan.org/pod/release/GMPASSOS/Statistics-R-0.02/lib/Statistics/R.pm
 
 Pre-Usage:  
 - if necessary, copy the lib/distParam directory from the RNAsnp sources over to the RNAsnp installation location.  
