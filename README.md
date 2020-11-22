@@ -16,7 +16,7 @@ Required software:
 
 	- RNAsnp: http://rth.dk/resources/rnasnp/software  
 	- muscle aligner: http://www.drive5.com/muscle  
-	- Vienna RNA package: http://www.itc.univie.ac.at/~ivo/RNA/INSTALL.html  
+	- Vienna RNA package: https://www.tbi.univie.ac.at/RNA/#download  
 	- Bio::AlignIO from cpan: https://metacpan.org/pod/Bio::AlignIO  
 	- fasconvert from cpan: https://metacpan.org/pod/distribution/FAST/bin/fasconvert
 	- Statistics::R from cpan: https://metacpan.org/pod/release/GMPASSOS/Statistics-R-0.02/lib/Statistics/R.pm
