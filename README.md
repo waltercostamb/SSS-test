@@ -4,9 +4,15 @@ Selection on the Secondary Structure-test: a test that detects positive and nega
 
 This repository contains the SSS-test and the local pipeline designed to calculate local blocks from a multi-FASTA file or lncRNA orthologs.
 
-The programs were designed for Unix-based operational systems, so you can use them in any Linux or MacOS computer. For Windows systems you need either specific compilers or a Virtual Machine in addition. To obtain the repository in a Unix machine and use it locally, you can either download the repository directly from the GITHub webpage, or you can clone the repository in the terminal with the following command line:
+The programs were designed for Unix-based operational systems, so you can use them in any Linux or MacOS computer. For Windows systems you need either specific compilers or a Virtual Machine in addition. To obtain the repository in a Unix machine and use it locally, you can either download the repository directly from the GITHub webpage, or you can clone the repository in the terminal.  
 
-git clone https://github.com/waltercostamb/SSS-test
+__***News***__  
+
+23.11.2020: The names of the tools were changed from 'SSS.sh' to 'SSS-test' and 'local.sh' to 'local-structure-pipeline'.  
+
+__***Cloning the repository on your UNIX machine***__  
+
+git clone https://github.com/waltercostamb/SSS-test   
 
 __***Requirements***__
 
