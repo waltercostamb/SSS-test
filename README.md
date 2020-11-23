@@ -12,7 +12,7 @@ __***News***__
 
 __***Cloning the repository on your UNIX machine***__  
 
-git clone https://github.com/waltercostamb/SSS-test   
+	git clone https://github.com/waltercostamb/SSS-test   
 
 __***Requirements***__
 
