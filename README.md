@@ -9,6 +9,7 @@ The programs were designed for Unix-based operational systems, so you can use th
 __***News***__  
 
 23.11.2020: The names of the tools were changed from 'SSS.sh' to 'SSS-test' and 'local.sh' to 'local-structure-pipeline'.  
+01.05.2019: Requirements for the FASTA header of the input file were simplified.  
 
 __***Cloning the repository on your UNIX machine***__  
 
@@ -44,20 +45,16 @@ __***Help pages***__
   
 Help page for usage:	
   
-	bash SSS.sh  
-	bash local.sh
+	bash SSS-test
+	bash local-structure-pipeline
          
 Notice that once you run the SSS-test for the first time for any multi-FASTA file, intermediate files will be created. Therefore, the next time you run the test again for the same file, the calculation of the sss-scores will be considerably faster.
 
 __***Input requirements***__
 
-The input multi-FASTA file has to be in a subfolder of the running folder for both pipelines (SSS-test and local.sh). If you are running the SSS-test or local.sh in $DIRECTORY, the input multi-FASTA must be located in $DIRECTORY/$SUB_FOLDER/  
+1) The input multi-FASTA file **must** to be in a subfolder of the running folder for both pipelines (SSS-test and local-structure-pipeline). If you are running the SSS-test or local.sh in $DIRECTORY, the input multi-FASTA must be located in $DIRECTORY/$SUB_FOLDER/  
 
-For the newest version of SSS-test and local.sh, there are no requirements for the FASTA header.  
-
-The old requirements for the FASTA header are still valid. In this case, the header must contain the name of the file: ">$FILE_NO_EXTENSION\t|\t$GENE_ID"  
-
- - Example for file "identity.fasta": ">identity	|	human"  
+2) The FASTA headers should **not** contain space characters. It is recommended that a small name is given to each sequence, making it easy to identify each one.  
 
 __***Tutorial***__
 
@@ -69,21 +66,21 @@ In this section, you will learn how to use the local pipeline and the SSS-test w
 
 Usage:	        
 
-	bash SSS.sh -i FOLDER/FILE -f FORMAT (fasta/aligned) -s STRUCTURE (Yes/No)
-	bash local.sh -i FOLDER/FILE -f FORMAT (fasta/aligned) -o OUTPUT_FOLDER
+	bash SSS-test -i FOLDER/FILE -f FORMAT (fasta/aligned) -s STRUCTURE (Yes/No)
+	bash local-structure-pipeline -i FOLDER/FILE -f FORMAT (fasta/aligned) -o OUTPUT_FOLDER
 
 In the /examples/ folder, you will find two multi-FASTA files: SIX3_AS1sub10.fa and H19X.fa. The first is a local structure block from the lncRNA SIX3-AS1 that can be submitted to the SSS-test directly. After running the SSS-test, you will obtain an output table with the selection scores and an output folder with the secondary structures of each species and respective consensus. Both outputs will be located in the input folder.
 
 To run the SSS-test for the local block 10 of the SIX3-AS1 lncRNA, use the following command line:
 
-	bash SSS.sh -i example/SIX3_AS1sub10.fa -f fasta -s Yes 
+	bash SSS-test -i example/SIX3_AS1sub10.fa -f fasta -s Yes 
 
 You will produce an output file with the SSS-scores at: /examples/SIX3_AS1sub10.sss and an output folder at: /examples/SIX3_AS1sub10_structures/.
 
 To measure structural selection locally in the H19X-AS1 lncRNA, you should first calculate local structure blocks and then apply the SSS-test for them. For that you can use the command lines below. The first command will create a folder: /HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
 
-	bash local.sh -i example/H19X.fa -f fasta -o H19X_local_structures 
-	bash SSS.sh -i H19X_local/H19X_sub2.fa -f fasta -s Yes
+	bash local-structure-pipeline -i example/H19X.fa -f fasta -o H19X_local_structures 
+	bash SSS-test -i H19X_local/H19X_sub2.fa -f fasta -s Yes
 
 The output of the local.sh script is a folder with all local structural blocks, which can be directly submitted to the SSS-test on not aligned mode (fasta).
 
@@ -104,16 +101,16 @@ sequence_ID	nr_changes	sp_dist	sp_length	alg_length	score_indels	score_changes	s
                 
 __***Reference and citation***__
 
-The SSS-test and local pipeline are refered in the following publication, which contains all details on the algorithms.
+The SSS-test and local pipeline are refered in the following publication, which contains all details on the algorithms.  
 
-If you use this test, please cite: 
+If you use this test, please cite:  
 
 "SSS-test: a novel test for detecting positive selection on RNA secondary structure", Maria Beatriz Walter Costa, Christian Höner zu Siederdissen, Marko Dunjic, Peter F. Stadler and Katja Nowick. BMC Bioinformatics. 2019  
 https://doi.org/10.1186/s12859-019-2711-y
 
 __***Contact***__
 
-If you have any questions or find any problems, contact the developer: bia.walter@gmail.com
+If you have any questions or problems, contact the developer: waltercostamb@gmail.com
 
 __***Author***__
 
