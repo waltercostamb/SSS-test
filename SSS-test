@@ -300,7 +300,8 @@ while read species
 	   do
 		if [[ -f ../$input_folder/$familyID-$species-$GAP_LENGTH.indel ]]
 		   then
-			cp ../$input_folder/$familyID-$species-$GAP_LENGTH.indel .
+			echo "Background information of indel has already been computed in file $input_folder/$familyID-$species-$GAP_LENGTH.indel"
+   			cp ../$input_folder/$familyID-$species-$GAP_LENGTH.indel .
 		   else
 			echo "Calculating background information of structural impact of a $GAP_LENGTH bp gap on the consensus using the gap-modelling pipeline and RNAforester"
 			grep '>' $familyID-$species-consensus.alg > $familyID-$species-consensus.fa
@@ -359,7 +360,8 @@ perl $script_dir/multipleObservationCorrection.pl $familyID-$species.indel indel
 
 	echo "Combining both scores for species specific changes and indels into one final selection score"
 	perl $script_dir/sum-all.pl $familyID-$species.tmp2.1 $distance $familyID $species ${#alg_length} $familyID-$species.indel $familyID-$species.pvalue indel-$species.final >> $familyID-nomedian.sss;
-	cp $familyID-$species.pvalue ../$input_folder/.
+	#26/11/2020: I commented the line below, since it doesn't provide additional any information to the user. The line originally just copied a pvalue file to the input folder
+	#cp $familyID-$species.pvalue ../$input_folder/.
 
 	rm $familyID-$species-consensus.tmp0 $familyID-$species.distance $familyID-$species.tmp2 $familyID-$species.tmp2.1 $familyID-$species.pvalue $familyID-$species.alg $familyID-$species-consensus.tmp1 $familyID-$species.clw $familyID-$species.alifold alirna.ps $familyID-$species-consensus.rnasnp $species-indel.tmp $familyID-${species}_ss.ps $familyID-$species-consensus_ss.ps $familyID-$species.out 
 	rm $familyID-$species-consensus.out indel-$species.final $familyID-$species-observed.indel $familyID-$species.indel $familyID-${species}_dp.ps $familyID-${species}_rss.ps $familyID-${species}-consensus_dp.ps $familyID-${species}-consensus_rss.ps
