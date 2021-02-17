@@ -8,7 +8,7 @@ The programs were designed for Unix-based operational systems, so you can use th
 
 __***News***__  
 
-17.02.2021: Removed line from SSS-test: export $PATH of RNAsnp
+17.02.2021: Removed line from SSS-test: export $PATH of RNAsnp  
 23.11.2020: The names of the tools were changed from 'SSS.sh' to 'SSS-test' and 'local.sh' to 'local-structure-pipeline'.  
 01.05.2019: Requirements for the FASTA header of the input file were simplified.  
 
