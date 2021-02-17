@@ -2,7 +2,6 @@
 
 #To get the usage just run the script with no arguments.
 
-export RNASNPPATH=/usr/local/RNAsnp-1.1;
 export LD_LIBRARY_PATH=$HOME/libs
 
 if [ $# == 0 ] ; then
