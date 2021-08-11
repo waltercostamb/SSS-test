@@ -82,9 +82,9 @@ You will produce an output file with the SSS-scores at: /examples/SIX3_AS1sub10.
 
 To measure structural selection locally in the H19X-AS1 lncRNA, you should first calculate local structure blocks and then apply the SSS-test for them. For that you can use the command lines below. The first command will create a folder: /HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
 
-	bash local-structure-pipeline -i example/H19X.fa -f fasta -o H19X_local_structures 
-	bash SSS-test -i H19X_local/H19X_sub2.fa -f fasta -s Yes
-
+	bash local-structure-pipeline -i example/H19X.fa -f fasta -o H19X_local_structures   
+	bash SSS-test -i H19X_local_structures/H19X_sub1.fasta -f fasta -s Yes  
+	
 The output of the local.sh script is a folder with all local structural blocks, which can be directly submitted to the SSS-test on not aligned mode (fasta).
 
 __***Output***__
