@@ -108,7 +108,7 @@ NUM_OF_SEQ=$(wc -l < species-$familyID.txt);
 if (( $NUM_OF_SEQ < 3 ))
    then
 
-	echo "$familyID has only $NUM_OF_SEQ species, which is not enough information to calculate the sd-ss scores";
+	echo "$familyID has only $NUM_OF_SEQ species, which is not enough information to calculate the sss scores";
 	echo "You should have at least 3 species";
 	
 	rm species-$familyID.txt 
