@@ -8,6 +8,7 @@ The programs were designed for Unix-based operational systems, so you can use th
 
 __***News***__  
 
+11.08.2021: Added caution message to Pre-Usage about "Statistics::R"  
 17.02.2021: Removed line from SSS-test: export $PATH of RNAsnp  
 23.11.2020: The names of the tools were changed from 'SSS.sh' to 'SSS-test' and 'local.sh' to 'local-structure-pipeline'.  
 01.05.2019: Requirements for the FASTA header of the input file were simplified.  
@@ -27,9 +28,10 @@ Required software:
 	- Vienna RNA package: https://www.tbi.univie.ac.at/RNA/#download  
 	- Bio::AlignIO from cpan: https://metacpan.org/pod/Bio::AlignIO  
 	- fasconvert from cpan: https://metacpan.org/pod/distribution/FAST/bin/fasconvert
-	- Statistics::R from cpan: https://metacpan.org/pod/release/GMPASSOS/Statistics-R-0.02/lib/Statistics/R.pm
+	- Statistics::R from cpan: https://metacpan.org/pod/release/GMPASSOS/Statistics-R-0.02/lib/Statistics/R.pm  
 
 Pre-Usage:  
+- make sure your "Statistics::R" is correctly installed and updated. Your SSS-test results will not be correct if you see the following message on your shell: "Can't locate object method "set" via package "Statistics :: R" at ... PATH_TO / multipleObservationCorrection.pl line 87, <tmp2_file> line 1.". This message  indicates the software is incorrectly installed or too old  
 - if necessary, copy the lib/distParam directory from the RNAsnp sources over to the RNAsnp installation location.  
 - export the path to RNAsnp installation location:  
   export RNASNPPATH=/path-to/RNAsnp-1.2  
