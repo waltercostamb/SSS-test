@@ -31,7 +31,10 @@ Required software:
 	- fasconvert from cpan: https://metacpan.org/pod/distribution/FAST/bin/fasconvert
 	- Statistics::R from cpan: https://metacpan.org/pod/release/GMPASSOS/Statistics-R-0.02/lib/Statistics/R.pm  
 
+After installation, follow the complete tutorial below to make sure all is working correctly with your local version of the SSS-test.   
+
 Pre-Usage:  
+
 - make sure your "Statistics::R" is correctly installed and updated. Your SSS-test results will not be correct if you see the following message on your shell: "Can't locate object method "set" via package "Statistics :: R" at ... PATH_TO / multipleObservationCorrection.pl line 87, <tmp2_file> line 1.". This message  indicates the software is incorrectly installed or too old  
 - if necessary, copy the lib/distParam directory from the RNAsnp sources over to the RNAsnp installation location.  
 - export the path to RNAsnp installation location:  
@@ -79,14 +82,14 @@ To run the SSS-test for the local block 10 of the SIX3-AS1 lncRNA, use the follo
 
 	bash SSS-test -i example/SIX3_AS1sub10.fa -f fasta -s Yes 
 
-You will produce an output file with the SSS-scores at: /examples/SIX3_AS1sub10.sss and an output folder at: /examples/SIX3_AS1sub10_structures/.
+You will produce an output file with the SSS-scores at: /examples/SIX3_AS1sub10.sss and an output folder at: /examples/SIX3_AS1sub10_structures/. Compare your output with the one shown in folder example/figures_for_tutorial/output1.png to make sure the software is working properly.  
 
 To measure structural selection locally in the H19X-AS1 lncRNA, you should first calculate local structure blocks and then apply the SSS-test for them. For that you can use the command lines below. The first command will create a folder: /HX19_local/ with the local structure blocks. The second applies the SSS-test to local structure 2, as an example.
 
 	bash local-structure-pipeline -i example/H19X.fa -f fasta -o H19X_local_structures   
 	bash SSS-test -i H19X_local_structures/H19X_sub1.fasta -f fasta -s Yes  
 	
-The output of the local.sh script is a folder with all local structural blocks, which can be directly submitted to the SSS-test on not aligned mode (fasta).
+The output of the local.sh script is a folder with all local structural blocks, which can be directly submitted to the SSS-test on not aligned mode (fasta). Compare the two outputs with the ones shown in folder example/figures_for_tutorial/output2.png and output3.png to make sure the software is working properly. Pay particular attention to the scores and warning messages. If your results do not match the figures, make sure your software is correctly installed or contact the developer.  
 
 __***Output***__
 
