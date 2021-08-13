@@ -4,10 +4,11 @@ Selection on the Secondary Structure-test: a test that detects positive and nega
 
 This repository contains the SSS-test and the local pipeline designed to calculate local blocks from a multi-FASTA file or lncRNA orthologs.
 
-The programs were designed for Unix-based operational systems, so you can use them in any Linux or MacOS computer. For Windows systems you need either specific compilers or a Virtual Machine in addition. To obtain the repository in a Unix machine and use it locally, you can either download the repository directly from the GITHub webpage, or you can clone the repository in the terminal.  
+The programs were designed for Unix-based operational systems, so you can use them with Linux or MacOS. For Windows systems you need either specific compilers or a Virtual Machine in addition. To obtain the repository in a Unix machine and use it locally, you can either download the repository directly from the GITHub webpage, or you can clone the repository in the terminal.  
 
 __***News***__  
 
+13.08.2021: Improved tutorial in README file  
 11.08.2021: Added caution message to Pre-Usage about "Statistics::R"  
 17.02.2021: Removed line from SSS-test: export $PATH of RNAsnp  
 23.11.2020: The names of the tools were changed from 'SSS.sh' to 'SSS-test' and 'local.sh' to 'local-structure-pipeline'.  
@@ -61,9 +62,9 @@ __***Input requirements***__
 
 __***Tutorial***__
 
-The SSS-test and the local pipeline both require a simple multi-FASTA file as input, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.
+The SSS-test and the local pipeline both require a simple multi-FASTA file as input, either pre-aligned or not aligned. The SSS-test predicts structural selection by assigning selection scores for each of the given sequences. The local pipeline calculates local structural blocks for long ncRNAs.  
 
-![](https://github.com/waltercostamb/SSS-test/blob/master/sss_workflow.png)
+<img src="https://github.com/waltercostamb/SSS-test/blob/master/sss_workflow.png" alt="drawing" width="500"/>  
 
 In this section, you will learn how to use the local pipeline and the SSS-test with examples contained in this repository. Just follow the directions below, and you will calculate selection scores for ncRNAs and lncRNA blocks and obtain images of secondary structures to analyse visually.
 
