@@ -41,12 +41,6 @@ Pre-Usage:
   export RNASNPPATH=/path-to/RNAsnp-1.2  
 - make sure that all binaries of required software are in the path (with /path-to/ and /RNAsnp/ /ViennaRNA/ etc replaced appropriately; relplot.pl is provided in a subfolder of the share folder of ViennaRNA)  
   export PATH=$PATH:/path-to/RNAsnp/bin:/path-to/ViennaRNA/bin:/path-to/ViennaRNA/share/ViennaRNA/bin:/path-to/muscle/bin  
-
-__***Bypassing installment requirements***__
- 
-If you do not wish to pre-install the required softwares and just use the SSS-test and local pipelines directly, you can use the nix-bundle available at: http://www.bioinf.uni-leipzig.de/Software/SSS-test/ 
-
-Just download the SSS-test inside the nix-bundle directory and use the software directly.
   
 __***Help pages***__
   
