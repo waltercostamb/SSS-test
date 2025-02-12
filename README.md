@@ -25,7 +25,7 @@ Both the SSS-test and local pipeline require additional software, which must be 
 Required software: 
 
 	- RNAsnp: http://rth.dk/resources/rnasnp/software  
-	- muscle aligner: http://www.drive5.com/muscle  
+	- muscle aligner (v3.8.31 or older): http://www.drive5.com/muscle  
 	- Vienna RNA package: https://www.tbi.univie.ac.at/RNA/#download  
 	- Bio::AlignIO from cpan: https://metacpan.org/pod/Bio::AlignIO  
 	- fasconvert from cpan: https://metacpan.org/pod/distribution/FAST/bin/fasconvert
